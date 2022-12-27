@@ -10,10 +10,10 @@ Instance a new PlantUML implementation.
 puml := NewPlantUML()
 ````
 
-## `NewPlantUMLClient`
+## `NewPlantUMLClient(url string) (PlantUMLClient, error)`
 Instance a new PlantUMLClient implementation.
 ````go
-cli := NewPlantUMLClient()
+cli, err := NewPlantUMLClient("https://www.plantuml.com/plantuml")
 ````
 
 # API Reference
