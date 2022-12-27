@@ -80,6 +80,15 @@ diagram := uml.String()
 ## PlantUMLClient
 Rest Client that render a PlantUML diagram.
 
+### `CompressDiagram(diagram []byte) (string, error)`
+Compress the diagram by Deflate and after encode to PlantUML B64
+
+````go
+diag, err := cli.CompressDiagram([]byte(`@startuml
+actor1->actor2: Hello World
+@enduml`))
+````
+
 ### `Render(renderType PlantUMLRender, diagram []byte) (string, []byte, error)`
 
 Render a diagram from bytes to specified Render Type. 
@@ -88,7 +97,9 @@ Retrieves the: Generated URL for render, Rendered Diagram, Error.
 
 
 ````go
-url, render, err := cli.Render(PlantUMLRender, []byte)
+url, render, err := cli.Render(SVG, []byte(`@startuml
+actor1->actor2: Hello World
+@enduml`))
 ````
 
 ### `RenderFile(PlantUMLRender, string) (string, []byte, error)`
@@ -97,7 +108,7 @@ Render a diagram from file to specified Render Type.
 Retrieves the: Generated URL for render, Rendered Diagram, Error.
 
 ````go
-url, render, err := cli.RenderFile(PlantUMLRender, string)
+url, render, err := cli.RenderFile(PlantUMLRender, "./diagram.puml")
 ````
 
 ### `BytesToSVG([]byte) (string, []byte, error)`

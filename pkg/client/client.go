@@ -22,6 +22,8 @@ const (
 const b64 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
 
 type PlantUMLClient interface {
+	CompressDiagram([]byte) (string, error)
+
 	Render(PlantUMLRender, []byte) (string, []byte, error)
 	RenderFile(PlantUMLRender, string) (string, []byte, error)
 
@@ -84,11 +86,18 @@ func request(u string) ([]byte, error) {
 	}
 }
 
-func (c *client) Render(r PlantUMLRender, b []byte) (string, []byte, error) {
+func (c *client) CompressDiagram(b []byte) (string, error) {
 	if z, err := c.zip(b); err != nil {
+		return "", err
+	} else {
+		return c.encode(z), nil
+	}
+}
+
+func (c *client) Render(r PlantUMLRender, b []byte) (string, []byte, error) {
+	if d, err := c.CompressDiagram(b); err != nil {
 		return "", nil, err
 	} else {
-		d := c.encode(z)
 		u := fmt.Sprintf("%s/%s/%s", c.url, r, d)
 		_b, err := c.get(u)
 		return u, _b, err
